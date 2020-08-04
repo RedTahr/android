@@ -123,14 +123,6 @@ public final class MainActivity extends BaseActivity
         mPreferences.restoreRing(); // if we temporarily disabled ring at some point, restore it.
         // TODO can this onCreate happen during DFU, when ring is intentionally disabled?
 
-        // Go through setup flow if necessary
-        if(!SetupHelper.isLoggedIn(this)) {
-            startLogin();
-            return;
-        }
-
-        // Everything's set up, show the app
-
         setContentView(R.layout.activity_main);
 
         //Download and cache GuidedMeditationsList
@@ -461,11 +453,6 @@ public final class MainActivity extends BaseActivity
     ////
     //// New user flow
     ////
-
-    public void startLogin() {
-        ActivityCompat.startActivity(this, new Intent(this, LoginActivity.class), null);
-        finish();
-    }
 
     public void startOnboarding() {
         mPreferences.setShowInstructions(true);
