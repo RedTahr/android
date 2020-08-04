@@ -97,10 +97,7 @@
         <service android:name=".bluetooth.DfuService" />
 
         <service android:name=".bluetooth.MadisonDfuService" />
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="YOUR-KEY-HERE"
-            />
+
     </application>
 
 </manifest>

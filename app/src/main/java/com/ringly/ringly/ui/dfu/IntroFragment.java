@@ -43,14 +43,14 @@ public final class IntroFragment extends Fragment  {
 
         view.findViewById(R.id.proceed).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View _) {
+            public void onClick(final View v) {
                 mActivity.onIntroDone();
             }
         });
 
         view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View _) {
+            public void onClick(final View v) {
                 mActivity.onIntroCanceled();
             }
         });

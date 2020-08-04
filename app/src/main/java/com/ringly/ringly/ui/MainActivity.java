@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
@@ -61,8 +60,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
-
-import io.fabric.sdk.android.Fabric;
 
 import static android.R.color.transparent;
 
@@ -116,7 +113,7 @@ public final class MainActivity extends BaseActivity
         //noinspection HardCodedStringLiteral
         Log.d(TAG, "onCreate: " + savedInstanceState);
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        // Fabric.with(this, new Crashlytics());
         mDb = Db.getInstance(this);
         // initialize super properties in case this is our first run:
         mMixpanel.updateNotificationSuperProperties();

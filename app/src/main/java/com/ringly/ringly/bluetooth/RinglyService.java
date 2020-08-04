@@ -18,7 +18,6 @@ import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.common.base.Optional;
 import com.google.common.collect.Sets;
 import com.google.common.primitives.Bytes;
@@ -993,7 +992,7 @@ public final class RinglyService extends Service implements GattCallback.Listene
         if (!deviceName.isPresent() || !deviceAddress.isPresent()) {
             //This should never happened, but in some rare condition, the device could disconnect and be null here
             //Check to avoid NPE
-            Crashlytics.logException(new Error("RingName Is null"));
+            // Crashlytics.logException(new Error("RingName Is null"));
             return;
         }
         if (DevicesNameRewriteUtils.needsRoseToDateRewrite(deviceName.get(), deviceAddress.get())) {

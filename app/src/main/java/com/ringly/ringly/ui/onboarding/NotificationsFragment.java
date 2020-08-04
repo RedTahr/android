@@ -125,7 +125,7 @@ public class NotificationsFragment extends Fragment {
 
         view.findViewById(R.id.onbd_done).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View _) {
+            public void onClick(final View v) {
                 mActivity.onDone();
             }
         });

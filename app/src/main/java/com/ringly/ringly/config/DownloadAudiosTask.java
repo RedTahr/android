@@ -3,7 +3,6 @@ package com.ringly.ringly.config;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.ringly.ringly.ui.screens.mindfulness.GuidedMeditationActivity;
 
 import java.io.File;
@@ -128,7 +127,7 @@ public class DownloadAudiosTask extends AsyncTask<String, Integer, Boolean> {
         try {
             mediaFile.delete();
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            // Crashlytics.logException(e);
         }
     }
 

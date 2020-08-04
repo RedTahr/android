@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.ringly.ringly.Preferences;
 import com.ringly.ringly.R;
 import com.ringly.ringly.ui.BaseActivity;
@@ -97,7 +96,7 @@ public class BreathingActivity extends BaseActivity implements View.OnClickListe
             minutes = Integer.valueOf((String) view.getTag());
         } catch (Exception e) {
             //this should never fail because the button tag is setted in the xml with the values 1 - 3 - 5
-            Crashlytics.logException(e);
+            // Crashlytics.logException(e);
         }
         secondsSelected = minutes * 60;
         view.setSelected(true);
@@ -334,7 +333,7 @@ public class BreathingActivity extends BaseActivity implements View.OnClickListe
                 Preferences.addMindfulMinutesCount(BreathingActivity.this, secondsSelected-second);
             } catch (Exception e) {
                 //this should never fail
-                Crashlytics.logException(e);
+                // Crashlytics.logException(e);
             }
         }
 
@@ -347,7 +346,7 @@ public class BreathingActivity extends BaseActivity implements View.OnClickListe
                 animator = null;
             } catch (Exception e) {
                 //this should never fail
-                Crashlytics.logException(e);
+                // Crashlytics.logException(e);
             }
         }
     }
@@ -362,7 +361,7 @@ public class BreathingActivity extends BaseActivity implements View.OnClickListe
             try{
                 wakeLock.acquire();
             } catch (Exception e) {
-                Crashlytics.logException(e);
+                // Crashlytics.logException(e);
             }
         }
     }

@@ -44,7 +44,7 @@ public final class DoneFragment extends Fragment  {
 
         view.findViewById(R.id.proceed).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View _) {
+            public void onClick(final View v) {
                 mActivity.onDone();
             }
         });

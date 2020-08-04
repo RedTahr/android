@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.crashlytics.android.Crashlytics;
 import com.ringly.ringly.Preferences;
 import com.ringly.ringly.R;
 import com.ringly.ringly.config.DownloadAudiosTask;
@@ -140,7 +139,7 @@ public class GuidedMeditationActivity extends BaseActivity implements  MediaPlay
                 mediaPlayer.prepareAsync();
             }
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            // Crashlytics.logException(e);
         }
     }
     /**
@@ -240,7 +239,7 @@ public class GuidedMeditationActivity extends BaseActivity implements  MediaPlay
                 updateTimer = null;
             } catch (Exception e) {
                 //this should never fail
-                Crashlytics.logException(e);
+                // Crashlytics.logException(e);
             }
         }
     }
@@ -250,7 +249,7 @@ public class GuidedMeditationActivity extends BaseActivity implements  MediaPlay
             try{
                 wakeLock.acquire();
             } catch (Exception e) {
-                Crashlytics.logException(e);
+                // Crashlytics.logException(e);
             }
         }
     }
@@ -297,7 +296,7 @@ public class GuidedMeditationActivity extends BaseActivity implements  MediaPlay
                 mediaPlayer.prepareAsync();
             }
         } catch (Exception e) {
-            Crashlytics.logException(e);
+            // Crashlytics.logException(e);
         }
     }
 

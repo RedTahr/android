@@ -15,17 +15,17 @@ public class MadisonDfuService extends DfuBaseService {
         return MainActivity.class;
     }
 
-    @Override
+ //   @Override
     protected UUID getDfuServiceUuid() {
         return Utilities.MADISON_DFU_SERVICE_UUID;
     }
 
-    @Override
+ //   @Override
     protected UUID getDfuControlPointUuid() {
         return Utilities.MADISON_DFU_CONTROL_POINT_CHARACTERISTIC;
     }
 
-    @Override
+ //   @Override
     protected UUID getDfuPacketUuid() {
         return Utilities.MADISON_DFU_PACKET_CHARACTERISTIC;
     }

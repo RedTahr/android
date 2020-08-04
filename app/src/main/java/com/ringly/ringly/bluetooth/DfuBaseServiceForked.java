@@ -2046,7 +2046,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	 * @param address the device address
 	 * @return the GATT device or <code>null</code> if Bluetooth adapter is disabled.
 	 */
-	private BluetoothGatt connect(final String address) {
+	protected BluetoothGatt connect(final String address) {
 		if (!mBluetoothAdapter.isEnabled())
 			return null;
 
@@ -2076,7 +2076,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	 * @param gatt  the GATT device to be disconnected
 	 * @param error error number
 	 */
-	private void terminateConnection(final BluetoothGatt gatt, final int error) {
+	protected void terminateConnection(final BluetoothGatt gatt, final int error) {
 		if (mConnectionState != STATE_DISCONNECTED) {
 			// Disconnect from the device
 			disconnect(gatt);
@@ -2094,7 +2094,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	 *
 	 * @param gatt the GATT device that has to be disconnected
 	 */
-	private void disconnect(final BluetoothGatt gatt) {
+	protected void disconnect(final BluetoothGatt gatt) {
 		if (mConnectionState == STATE_DISCONNECTED)
 			return;
 
@@ -2115,7 +2115,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	/**
 	 * Wait until the connection state will change to {@link #STATE_DISCONNECTED} or until an error occurs.
 	 */
-	private void waitUntilDisconnected() {
+	protected void waitUntilDisconnected() {
 		try {
 			synchronized (mLock) {
 				while (mConnectionState != STATE_DISCONNECTED && mError == 0)
@@ -2131,7 +2131,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	 *
 	 * @param gatt the GATT device to be closed
 	 */
-	private void close(final BluetoothGatt gatt) {
+	protected void close(final BluetoothGatt gatt) {
 		logi("Cleaning up...");
 		sendLogBroadcast(LOG_LEVEL_DEBUG, "gatt.close()");
 		gatt.close();
@@ -2144,7 +2144,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	 * @param gatt  the GATT device to be refreshed
 	 * @param force <code>true</code> to force the refresh
 	 */
-	private void refreshDeviceCache(final BluetoothGatt gatt, final boolean force) {
+	protected void refreshDeviceCache(final BluetoothGatt gatt, final boolean force) {
 		/*
 		 * If the device is bonded this is up to the Service Changed characteristic to notify Android that the services has changed.
 		 * There is no need for this trick in that case.
@@ -2179,7 +2179,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	 */
 	private int getStatusCode(final byte[] response, final int request) throws UnknownResponseException {
 		if (response == null || response.length != 3 || response[0] != OP_CODE_RESPONSE_CODE_KEY || response[1] != request || response[2] < 1 || response[2] > 6)
-			throw new UnknownResponseException("Invalid response received", response, request);
+			throw new UnknownResponseException("Invalid response received", response, request, -1);
 		return response[2];
 	}
 
@@ -2195,7 +2195,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	 */
 	private int readVersion(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) throws DeviceDisconnectedException, DfuException, UploadAbortedException {
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to read version number", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to read version number");//, mConnectionState);
 		// If the DFU Version characteristic is not available we return 0.
 		if (characteristic == null)
 			return 0;
@@ -2225,7 +2225,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (mError != 0)
 			throw new DfuException("Unable to read version number", mError);
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to read version number", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to read version number");//, mConnectionState);
 
 		// The version is a 16-bit unsigned int
 		return characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 0);
@@ -2245,7 +2245,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	private void enableCCCD(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic, final int type) throws DeviceDisconnectedException, DfuException, UploadAbortedException {
 		final String debugString = type == NOTIFICATIONS ? "notifications" : "indications";
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to set " + debugString + " state", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to set " + debugString + " state");//, mConnectionState);
 
 		mReceivedData = null;
 		mError = 0;
@@ -2279,7 +2279,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (mError != 0)
 			throw new DfuException("Unable to set " + debugString + " state", mError);
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to set " + debugString + " state", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to set " + debugString + " state");//, mConnectionState);
 	}
 
 	/**
@@ -2294,7 +2294,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 	 */
 	private boolean isServiceChangedCCCDEnabled(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic) throws DeviceDisconnectedException, DfuException, UploadAbortedException {
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to read Service Changed CCCD", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to read Service Changed CCCD");//, mConnectionState);
 		// If the Service Changed characteristic or the CCCD is not available we return false.
 		if (characteristic == null)
 			return false;
@@ -2325,7 +2325,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (mError != 0)
 			throw new DfuException("Unable to read Service Changed CCCD", mError);
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to read Service Changed CCCD", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to read Service Changed CCCD");//, mConnectionState);
 
 		return mServiceChangedIndicationsEnabled;
 	}
@@ -2390,7 +2390,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (!mResetRequestSent && mError != 0)
 			throw new DfuException("Unable to write Op Code " + value[0], mError);
 		if (!mResetRequestSent && mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to write Op Code " + value[0], mConnectionState);
+			throw new DeviceDisconnectedException("Unable to write Op Code " + value[0]);//, mConnectionState);
 	}
 
 	/**
@@ -2431,7 +2431,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (mError != 0)
 			throw new DfuException("Unable to write Image Size", mError);
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to write Image Size", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to write Image Size");//, mConnectionState);
 	}
 
 	/**
@@ -2482,7 +2482,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (mError != 0)
 			throw new DfuException("Unable to write Image Sizes", mError);
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to write Image Sizes", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to write Image Sizes");//, mConnectionState);
 	}
 
 	/**
@@ -2529,7 +2529,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (mError != 0)
 			throw new DfuException("Unable to write Init DFU Parameters", mError);
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to write Init DFU Parameters", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to write Init DFU Parameters");//, mConnectionState);
 	}
 
 	/**
@@ -2572,7 +2572,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (mError != 0)
 			throw new DfuException("Uploading Firmware Image failed", mError);
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Uploading Firmware Image failed: device disconnected", mConnectionState);
+			throw new DeviceDisconnectedException("Uploading Firmware Image failed: device disconnected");//, mConnectionState);
 
 		return mReceivedData;
 	}
@@ -2720,14 +2720,14 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 		if (mError != 0)
 			throw new DfuException("Unable to write Op Code", mError);
 		if (mConnectionState != STATE_CONNECTED_AND_READY)
-			throw new DeviceDisconnectedException("Unable to write Op Code", mConnectionState);
+			throw new DeviceDisconnectedException("Unable to write Op Code");//, mConnectionState);
 		return mReceivedData;
 	}
 
 	/**
 	 * Creates or updates the notification in the Notification Manager. Sends broadcast with current progress to the activity.
 	 */
-	private void updateProgressNotification() {
+	public void updateProgressNotification() {
 		final int progress = (int) (100.0f * mBytesSent / mImageSizeInBytes);
 		if (mLastProgress == progress)
 			return;
@@ -2767,14 +2767,14 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 				builder.setOngoing(true).setContentTitle(getString(R.string.dfu_status_connecting)).setContentText(getString(R.string.dfu_status_connecting_msg, deviceName)).setProgress(100, 0, true);
 				break;
 			case PROGRESS_STARTING:
-				builder.setOngoing(true).setContentTitle(getString(R.string.dfu_status_starting)).setContentText(getString(R.string.dfu_status_starting_msg, deviceName)).setProgress(100, 0, true);
+				builder.setOngoing(true).setContentTitle(getString(R.string.dfu_status_starting)).setContentText(getString(R.string.dfu_status_starting_msg) + deviceName).setProgress(100, 0, true);
 				break;
 			case PROGRESS_ENABLING_DFU_MODE:
-				builder.setOngoing(true).setContentTitle(getString(R.string.dfu_status_switching_to_dfu)).setContentText(getString(R.string.dfu_status_switching_to_dfu_msg, deviceName))
+				builder.setOngoing(true).setContentTitle(getString(R.string.dfu_status_switching_to_dfu)).setContentText(getString(R.string.dfu_status_switching_to_dfu_msg) + deviceName)
 						.setProgress(100, 0, true);
 				break;
 			case PROGRESS_VALIDATING:
-				builder.setOngoing(true).setContentTitle(getString(R.string.dfu_status_validating)).setContentText(getString(R.string.dfu_status_validating_msg, deviceName)).setProgress(100, 0, true);
+				builder.setOngoing(true).setContentTitle(getString(R.string.dfu_status_validating)).setContentText(getString(R.string.dfu_status_validating_msg) + deviceName).setProgress(100, 0, true);
 				break;
 			case PROGRESS_DISCONNECTING:
 				builder.setOngoing(true).setContentTitle(getString(R.string.dfu_status_disconnecting)).setContentText(getString(R.string.dfu_status_disconnecting_msg, deviceName))
@@ -2796,7 +2796,7 @@ public abstract class DfuBaseServiceForked extends DfuBaseService {
 				} else {
 					// progress is in percents
 					final String title = mPartsTotal == 1 ? getString(R.string.dfu_status_uploading) : getString(R.string.dfu_status_uploading_part, mPartCurrent, mPartsTotal);
-					final String text = (mFileType & TYPE_APPLICATION) > 0 ? getString(R.string.dfu_status_uploading_msg, deviceName) : getString(R.string.dfu_status_uploading_components_msg, deviceName);
+					final String text = (mFileType & TYPE_APPLICATION) > 0 ? getString(R.string.dfu_status_uploading_msg, deviceName) : getString(R.string.dfu_status_uploading_msg) + deviceName;
 					builder.setOngoing(true).setContentTitle(title).setContentText(text).setProgress(100, progress, false);
 				}
 		}
