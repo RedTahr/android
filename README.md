@@ -1,5 +1,9 @@
-# Ringly Android app
+# a fork of the Ringly Android app
 
+Issues are just my notes of todos, PRs are welcome over issues :-)
+
+
+================================================================
 
 ## Development
 
